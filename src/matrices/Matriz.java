@@ -69,6 +69,39 @@ public class Matriz {
         return resultado;
     }
     
+    // Calcular la matriz inversa
+    public static Matriz inversa(Matriz d) throws DimensionesIncompatibles, CloneNotSupportedException
+    {
+        if (d.getDimension().height != d.getDimension().width)
+            throw new DimensionesIncompatibles("La matriz debe ser cuadrada");
+        
+        Matriz res = (Matriz)d.clone();
+        
+        int filas = d.getDimension().height;
+        Matriz b = new Matriz(filas, filas, false);
+
+        for (int i = 0; i < filas; i++)
+        {
+            b.datos[i][i] = 1;
+        }
+
+        for (int k = 0; k < filas-1; k++)
+        {
+            for (int i = k+1; i < filas; i++)
+            {
+                for (int s = 0; s < filas; s++)
+                {
+                    b.datos[i][s] -= res.datos[i][k] * b.datos[k][s] / res.datos[k][k];
+                }
+                for(int j = k+1; j < filas; j++)
+                {
+                    res.datos[i][j] -= res.datos[i][k] * res.datos[k][j] / res.datos[k][k];
+                }
+            }
+        }
+        return res;
+    }
+    
     @Override
     public String toString(){
         String ret = "";
